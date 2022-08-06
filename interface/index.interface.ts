@@ -1,3 +1,3 @@
-import { loginParams } from "./login.interface";
+import { LoginParams, Regster, User } from "./login.interface";
 
-export { loginParams };
+export { LoginParams, Regster, User };

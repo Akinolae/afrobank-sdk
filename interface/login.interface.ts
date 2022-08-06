@@ -1,6 +1,11 @@
-interface loginParams {
+interface LoginParams {
   email: string;
   password: string;
 }
 
-export { loginParams };
+interface User {
+  accountNumber: string;
+}
+
+interface Regster {}
+export { LoginParams, User, Regster };
