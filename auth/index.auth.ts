@@ -1,4 +1,4 @@
-import { LoginParams, Regster, User } from "../interface/index.interface";
+import { LoginParams, TWOFA, User } from "../interface/index.interface";
 import { Axios } from "../lib/index.lib";
 
 class Auth {
@@ -8,7 +8,7 @@ class Auth {
     this.token = token;
   }
 
-  public async register(params: Regster): Promise<void> {
+  public async register(params: {}): Promise<void> {
     try {
       await Axios.post("/register", params);
     } catch (error) {
@@ -31,6 +31,29 @@ class Auth {
       const { accountNumber } = params;
       const authorization = hasAuth ? this.authorization() : {};
       const res = await Axios.get(`/user/${accountNumber}`, authorization);
+      return res.data.message;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async enable2FA(email: string): Promise<any> {
+    try {
+      const res = await Axios.patch(`/enable2fa/${email}`, this.authorization);
+      return res.data.message;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async disable2FA(params: TWOFA): Promise<any> {
+    const { code, email } = params;
+    try {
+      const res = await Axios.patch(
+        `/enable2fa/${email}`,
+        { code },
+        this.authorization()
+      );
       return res.data.message;
     } catch (error) {
       throw error;

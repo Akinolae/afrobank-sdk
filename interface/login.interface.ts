@@ -7,5 +7,8 @@ interface User {
   accountNumber: string;
 }
 
-interface Regster {}
-export { LoginParams, User, Regster };
+interface TWOFA {
+  email: string;
+  code: string | number;
+}
+export { LoginParams, User, TWOFA };

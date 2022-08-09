@@ -49,6 +49,29 @@ class Auth {
             }
         });
     }
+    enable2FA(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const res = yield index_lib_1.Axios.patch(`/enable2fa/${email}`, this.authorization);
+                return res.data.message;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    disable2FA(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { code, email } = params;
+            try {
+                const res = yield index_lib_1.Axios.patch(`/enable2fa/${email}`, { code }, this.authorization());
+                return res.data.message;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     authorization() {
         return {
             headers: {
