@@ -49,10 +49,10 @@ class Auth {
             }
         });
     }
-    enable2FA(email) {
+    enable2FA() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const res = yield index_lib_1.Axios.patch(`/enable2fa/${email}`, this.authorization);
+                const res = yield index_lib_1.Axios.patch(`/enable2fa/`, this.authorization());
                 return res.data.message;
             }
             catch (error) {
@@ -60,11 +60,20 @@ class Auth {
             }
         });
     }
+    getProfile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const res = yield index_lib_1.Axios.get("/getProfile/", this.authorization());
+                return res.data.message;
+            }
+            catch (error) { }
+        });
+    }
     disable2FA(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { code, email } = params;
+            const { code } = params;
             try {
-                const res = yield index_lib_1.Axios.patch(`/enable2fa/${email}`, { code }, this.authorization());
+                const res = yield index_lib_1.Axios.patch(`/disable2fa/`, { code }, this.authorization());
                 return res.data.message;
             }
             catch (error) {

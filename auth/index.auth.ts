@@ -37,20 +37,27 @@ class Auth {
     }
   }
 
-  public async enable2FA(email: string): Promise<any> {
+  public async enable2FA(): Promise<any> {
     try {
-      const res = await Axios.patch(`/enable2fa/${email}`, this.authorization);
+      const res = await Axios.patch(`/enable2fa/`, this.authorization());
       return res.data.message;
     } catch (error) {
       throw error;
     }
   }
 
+  public async getProfile(): Promise<any> {
+    try {
+      const res = await Axios.get("/getProfile/", this.authorization());
+      return res.data.message;
+    } catch (error) {}
+  }
+
   public async disable2FA(params: TWOFA): Promise<any> {
-    const { code, email } = params;
+    const { code } = params;
     try {
       const res = await Axios.patch(
-        `/enable2fa/${email}`,
+        `/disable2fa/`,
         { code },
         this.authorization()
       );
