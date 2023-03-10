@@ -15,9 +15,13 @@ type api = {
 
 class Api {
   private store;
+  private endpoint;
+  private other;
 
-  constructor(store: any) {
+  constructor(store: any, endpoint: string, other: any) {
     this.store = store;
+    this.endpoint = endpoint;
+    this.other = other;
   }
 
   private async validateToken() {
@@ -56,6 +60,7 @@ class Api {
       });
 
       const data: any = response.extractData(res);
+      this.store?.dispatch(this.other?.updateUser(data));
 
       return data?.message;
     } catch (error: any) {
@@ -64,7 +69,13 @@ class Api {
   }
 
   public async apiFunctionCall(params: api) {
-    const { method, url, data, hasAuth, options } = params;
+    const {
+      method,
+      url,
+      data,
+      hasAuth,
+      options = { "Content-Type": "application/json" },
+    } = params;
 
     const val = !!data
       ? { body: typeof data !== "string" ? JSON.stringify(data) : data }
@@ -80,7 +91,7 @@ class Api {
       options.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`http://localhost:3005/Api/v1/${url}`, {
+    const response = await fetch(this.endpoint + url, {
       method: method,
       headers: options,
       ...val,

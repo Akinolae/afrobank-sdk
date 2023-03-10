@@ -6,9 +6,9 @@ class Auth {
   private store;
   private auth;
 
-  constructor(store: any) {
+  constructor(store: any, endpoint: string, other: any) {
     this.store = store;
-    this.auth = new Api(this.store);
+    this.auth = new Api(this.store, endpoint, other);
   }
 
   public async register(params: {}): Promise<void> {
