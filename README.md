@@ -14,3 +14,19 @@ yarn add https://github.com/Akinolae/afrobank-sdk.git#master
 ```
 
 ## `Authentication`
+
+```javascript
+import { Auth } from "afrobank-sdk;
+
+const auth = new Auth(/* add redux store */, endpointUrl, optionalData)
+
+async function login (data) {
+    try {
+        const response = await auth.login(data)
+        return response;
+    } catch (e) {
+        throw e
+    }
+}
+
+```
