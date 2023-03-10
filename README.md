@@ -8,4 +8,7 @@ Afrobank Software Development Kit built to ease developement process and access 
 
 ```
 npm i https://github.com/Akinolae/afrobank-sdk.git#master
+
+
+yarn add https://github.com/Akinolae/afrobank-sdk.git#master
 ```
