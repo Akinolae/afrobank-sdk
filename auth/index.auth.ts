@@ -1,16 +1,23 @@
-import { LoginParams, TWOFA, User } from "../interface/index.interface";
-import { Axios } from "../lib/index.lib";
+import Api from "../lib/index.lib";
+import responseUtils from "../utils/response.utils";
+import { LoginParams, User } from "../interface/index.interface";
 
 class Auth {
-  private token: string;
+  private store;
+  private auth;
 
-  constructor(token: string) {
-    this.token = token;
+  constructor(store: any, endpoint: string, other: any) {
+    this.store = store;
+    this.auth = new Api(this.store, endpoint, other);
   }
 
   public async register(params: {}): Promise<void> {
     try {
-      await Axios.post("/register", params);
+      await this.auth.apiFunctionCall({
+        url: "register",
+        method: "POST",
+        data: params,
+      });
     } catch (error) {
       throw error;
     }
@@ -18,61 +25,55 @@ class Auth {
 
   public async login(params: LoginParams): Promise<any> {
     try {
-      const { email, password } = params;
-      const res = await Axios.post("/login", { email, password });
+      const res = await this.auth.apiFunctionCall({
+        url: "login",
+        method: "POST",
+        data: params,
+      });
+
+      const data = responseUtils.extractData(res);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getUser(params: User): Promise<any> {
+    const { accountNumber } = params;
+
+    try {
+      const res = await this.auth.apiFunctionCall({
+        method: "GET",
+        url: `user/${accountNumber}`,
+        hasAuth: true,
+      });
+
       return res.data.message;
     } catch (error) {
       throw error;
     }
   }
 
-  public async getUser(params: User, hasAuth: boolean): Promise<any> {
+  public async validate2FA(params: string) {
     try {
-      const { accountNumber } = params;
-      const authorization = hasAuth ? this.authorization() : {};
-      const res = await Axios.get(`/user/${accountNumber}`, authorization);
-      return res.data.message;
-    } catch (error) {
-      throw error;
-    }
-  }
+      await this.auth.apiFunctionCall({
+        method: "POST",
+        url: "validate2fa",
+        data: { code: params },
+        hasAuth: true,
+      });
 
-  public async enable2FA(): Promise<any> {
-    try {
-      const res = await Axios.patch(`/enable2fa/`, this.authorization());
-      return res.data.message;
-    } catch (error) {
-      throw error;
+      return;
+    } catch (error: any) {
+      throw error.message || error;
     }
   }
 
   public async getProfile(): Promise<any> {
-    try {
-      const res = await Axios.get("/getProfile/", this.authorization());
-      return res.data.message;
-    } catch (error) {}
-  }
+    const res = await this.auth.getProfile();
+    const data: any = responseUtils.extractData(res);
 
-  public async disable2FA(params: TWOFA): Promise<any> {
-    const { code } = params;
-    try {
-      const res = await Axios.patch(
-        `/disable2fa/`,
-        { code },
-        this.authorization()
-      );
-      return res.data.message;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private authorization(): object {
-    return {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    };
+    return data?.message;
   }
 }
 
