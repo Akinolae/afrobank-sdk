@@ -12,3 +12,5 @@ npm i https://github.com/Akinolae/afrobank-sdk.git#master
 
 yarn add https://github.com/Akinolae/afrobank-sdk.git#master
 ```
+
+## `Authentication`
