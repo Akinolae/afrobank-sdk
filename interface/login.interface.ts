@@ -11,4 +11,4 @@ interface TWOFA {
   email: string;
   code: string | number;
 }
-export { LoginParams, User, TWOFA };
+export type { LoginParams, User, TWOFA };
