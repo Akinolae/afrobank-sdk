@@ -3,10 +3,10 @@ import responseUtils from "../utils/response.utils";
 import { LoginParams, User } from "../interface/index.interface";
 
 class Auth {
-  private store;
+  private store: object;
   private auth;
 
-  constructor(store: any, endpoint: string, other: any) {
+  constructor(store: object, endpoint: string, other: any) {
     this.store = store;
     this.auth = new Api(this.store, endpoint, other);
   }

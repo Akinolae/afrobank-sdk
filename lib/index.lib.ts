@@ -2,14 +2,13 @@
  used Fetch instead of  Axios
  exended to accomodate token verification and authorizations
 */
-
 import response from "../utils/response.utils";
 
 type api = {
   url: string;
   method: "GET" | "PATCH" | "POST" | "PUT";
   options?: any;
-  data?: any;
+  data?: object;
   hasAuth?: boolean;
 };
 
@@ -53,6 +52,7 @@ class Api {
 
   public async getProfile() {
     const { email } = this.store.getState().user.payLoad;
+    console.log(this.store.getState().user.payLoad);
     try {
       const res = await this.apiFunctionCall({
         url: `getProfile?email=${email}`,
@@ -77,13 +77,11 @@ class Api {
       options = { "Content-Type": "application/json" },
     } = params;
 
-    const val = !!data
-      ? { body: typeof data !== "string" ? JSON.stringify(data) : data }
-      : {};
+    const val = !!data ? { body: JSON.stringify(data) } : {};
 
     /*
     only validate token when @params(hasAuth) => true
-  */
+    */
 
     if (hasAuth) {
       await this.validateToken();
