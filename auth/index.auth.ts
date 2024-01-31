@@ -1,6 +1,6 @@
 import Api from "../lib/index.lib";
 import responseUtils from "../utils/response.utils";
-import { LoginParams, User } from "../interface/index.interface";
+import { LoginParams, User, RegisterParams } from "../types/index.interface";
 
 class Auth {
   private store: object;
@@ -11,7 +11,7 @@ class Auth {
     this.auth = new Api(this.store, endpoint, other);
   }
 
-  public async register(params: {}): Promise<void> {
+  public async register(params: RegisterParams): Promise<void> {
     try {
       await this.auth.apiFunctionCall({
         url: "register",

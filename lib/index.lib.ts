@@ -3,14 +3,7 @@
  exended to accomodate token verification and authorizations
 */
 import response from "../utils/response.utils";
-
-type api = {
-  url: string;
-  method: "GET" | "PATCH" | "POST" | "PUT";
-  options?: any;
-  data?: object;
-  hasAuth?: boolean;
-};
+import { FetchParams } from "../types/index.interface";
 
 class Api {
   private store;
@@ -52,7 +45,6 @@ class Api {
 
   public async getProfile() {
     const { email } = this.store.getState().user.payLoad;
-    console.log(this.store.getState().user.payLoad);
     try {
       const res = await this.apiFunctionCall({
         url: `getProfile?email=${email}`,
@@ -68,7 +60,7 @@ class Api {
     }
   }
 
-  public async apiFunctionCall(params: api) {
+  public async apiFunctionCall(params: FetchParams) {
     const {
       method,
       url,
