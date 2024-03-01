@@ -18,8 +18,8 @@ class Auth {
         method: "POST",
         data: params,
       });
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw responseUtils.extractError(error);
     }
   }
 
@@ -33,8 +33,20 @@ class Auth {
 
       const data = responseUtils.extractData(res);
       return data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw responseUtils.extractError(error);
+    }
+  }
+
+  public async verifyEmail(email: string, code: string): Promise<void> {
+    try {
+      await this.auth.apiFunctionCall({
+        url: "confirmSignUp",
+        method: "POST",
+        data: { email, code },
+      });
+    } catch (error: any) {
+      throw responseUtils.extractError(error);
     }
   }
 
@@ -49,8 +61,8 @@ class Auth {
       });
 
       return res.data.message;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw responseUtils.extractError(error);
     }
   }
 
@@ -65,7 +77,7 @@ class Auth {
 
       return;
     } catch (error: any) {
-      throw error.message || error;
+      throw responseUtils.extractError(error);
     }
   }
 
