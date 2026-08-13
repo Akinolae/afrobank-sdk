@@ -22,7 +22,7 @@ interface RegisterParams {
 
 interface FetchParams {
   url: string;
-  method: "GET" | "PATCH" | "POST" | "PUT";
+  method: "GET" | "PATCH" | "POST" | "PUT" | "DELETE";
   options?: any;
   data?: object;
   hasAuth?: boolean;

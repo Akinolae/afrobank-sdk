@@ -4,16 +4,16 @@ import { LoginParams, User, RegisterParams } from "../types/index.interface";
 
 class Auth {
   private store: object;
-  private auth;
+  private api: Api;
 
   constructor(store: object, endpoint: string, other: any) {
     this.store = store;
-    this.auth = new Api(this.store, endpoint, other);
+    this.api = new Api(this.store, endpoint, other);
   }
 
   public async register(params: RegisterParams): Promise<void> {
     try {
-      await this.auth.apiFunctionCall({
+      await this.api.apiFunctionCall({
         url: "register",
         method: "POST",
         data: params,
@@ -25,7 +25,7 @@ class Auth {
 
   public async login(params: LoginParams): Promise<any> {
     try {
-      const res = await this.auth.apiFunctionCall({
+      const res = await this.api.apiFunctionCall({
         url: "login",
         method: "POST",
         data: params,
@@ -40,7 +40,7 @@ class Auth {
 
   public async verifyEmail(email: string, code: string): Promise<void> {
     try {
-      await this.auth.apiFunctionCall({
+      await this.api.apiFunctionCall({
         url: "confirmSignUp",
         method: "POST",
         data: { email, code },
@@ -54,13 +54,13 @@ class Auth {
     const { accountNumber } = params;
 
     try {
-      const res = await this.auth.apiFunctionCall({
+      const res = await this.api.apiFunctionCall({
         method: "GET",
         url: `user/${accountNumber}`,
         hasAuth: true,
       });
 
-      return res.data.message;
+      return responseUtils.extractData(res);
     } catch (error: any) {
       throw responseUtils.extractError(error);
     }
@@ -68,7 +68,7 @@ class Auth {
 
   public async validate2FA(params: string) {
     try {
-      await this.auth.apiFunctionCall({
+      await this.api.apiFunctionCall({
         method: "POST",
         url: "validate2fa",
         data: { code: params },
@@ -82,10 +82,12 @@ class Auth {
   }
 
   public async getProfile(): Promise<any> {
-    const res = await this.auth.getProfile();
-    const data: any = responseUtils.extractData(res);
-
-    return data?.message;
+    try {
+      const data = await this.api.getProfile();
+      return data;
+    } catch (error: any) {
+      throw responseUtils.extractError(error);
+    }
   }
 }
 
